@@ -34,7 +34,7 @@ mySeedColor = Colors.indigo
 
 ## Screenshot
 
-![Running App](creenshot (53).png)
+![Running App](Screenshot (53).png)
 
 The screenshot shows the counter above my threshold and the "You're on a roll!" message. It also shows that the Reset button has been used.
 
