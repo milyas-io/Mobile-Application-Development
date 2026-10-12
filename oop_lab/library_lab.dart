@@ -227,7 +227,6 @@ void step4() {
 void step5() {
   final Book book = mainBook();
   int successfulRenewals = 0;
-
   for (int i = 0; i < renewAttempts; i++) {
     if (book.renew(renewLimit)) {
       successfulRenewals++;
@@ -238,7 +237,6 @@ void step5() {
     'Step 5: renewed $successfulRenewals of '
     '$renewAttempts attempts (limit $renewLimit)',
   );
-
   print('Step 5: renew once more? ${book.renew(renewLimit)}');
   print('Step 5: dvd can renew too? ${mainDvd().renew(1)}');
 
@@ -246,8 +244,37 @@ void step5() {
   // superclass. Only Book and Dvd need renewal behavior.
 }
 
+class Shelf<T extends LibraryItem> {
+  final List<T> items = [];
+
+  void add(T item) {
+    if (items.length < shelfSize) {
+      items.add(item);
+    }
+  }
+
+  int get count => items.length;
+
+  T? findByTitle(String title) {
+    for (final item in items) {
+      if (item.title == title) {
+        return item;
+      }
+    }
+    return null;
+  }
+}
+
 void step6() {
-  print('--- Step 6 ---');
+  final Shelf<LibraryItem> shelf = Shelf<LibraryItem>();
+  shelf.add(mainBook());
+  shelf.add(mainMagazine());
+  shelf.add(mainDvd());
+  print('Step 6: shelf count = ${shelf.count}');
+  final found = shelf.findByTitle(mainBook().title);
+  print('Step 6: found book? ${found != null}');
+  final missing = shelf.findByTitle('Unknown Title');
+  print('Step 6: missing item? ${missing == null}');
 }
 
 void step7() {
