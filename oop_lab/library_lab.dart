@@ -26,20 +26,29 @@ final int renewLimit = 1 + t % 3;
 final int renewAttempts = 2 + u;
 final int shelfSize = 3 + u % 4;
 
-class LibraryItem {
+abstract class LibraryItem {
   final String title;
   final int year;
 
   LibraryItem(this.title, this.year);
+
   String describe() => '$title ($year)';
+
+  int lateFee(int days);
 }
 
 class Book extends LibraryItem {
   final int pages;
 
   Book(super.title, super.year, this.pages);
+
   @override
   String describe() => '${super.describe()}, $pages pages';
+
+  @override
+  int lateFee(int days) {
+    return days * feePerDay;
+  }
 }
 
 class Magazine extends LibraryItem {
@@ -49,6 +58,11 @@ class Magazine extends LibraryItem {
 
   @override
   String describe() => '${super.describe()}, issue $issue';
+
+  @override
+  int lateFee(int days) {
+    return days * (feePerDay ~/ 2);
+  }
 }
 
 Magazine mainMagazine() {
@@ -58,6 +72,30 @@ Magazine mainMagazine() {
     titles[index],
     yearOf(index),
     1 + (t + u) % 12,
+  );
+}
+
+class Dvd extends LibraryItem {
+  final int minutes;
+
+  Dvd(super.title, super.year, this.minutes);
+
+  @override
+  String describe() => '${super.describe()}, $minutes min';
+
+  @override
+  int lateFee(int days) {
+    return days * feePerDay * 2;
+  }
+}
+
+Dvd mainDvd() {
+  final int index = (u + 2) % 10;
+
+  return Dvd(
+    titles[index],
+    yearOf(index),
+    90 + seed % 40,
   );
 }
 
@@ -101,7 +139,27 @@ void step2() {
 }
 
 void step3() {
-  print('--- Step 3 ---');
+  final Book book = mainBook();
+  final Magazine magazine = mainMagazine();
+  final Dvd dvd = mainDvd();
+
+  print(
+    'Step 3: Book late fee for $daysLate days = '
+    '${book.lateFee(daysLate)}',
+  );
+
+  print(
+    'Step 3: Magazine late fee for $daysLate days = '
+    '${magazine.lateFee(daysLate)}',
+  );
+
+  print(
+    'Step 3: Dvd late fee for $daysLate days = '
+    '${dvd.lateFee(daysLate)}',
+  );
+
+  // An abstract class cannot be instantiated directly.
+  // Its concrete subclasses must implement lateFee().
 }
 
 void step4() {
