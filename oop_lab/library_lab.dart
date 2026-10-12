@@ -136,6 +136,40 @@ Book mainBook() {
   return Book(titles[u], yearOf(u), 100 + 3 * seed);
 }
 
+enum MemberType {
+  student(3, 50),
+  faculty(10, 20),
+  guest(1, 0);
+
+  final int maxLoans;
+  final int discountPercent;
+
+  const MemberType(this.maxLoans, this.discountPercent);
+
+  int applyDiscount(int fee) {
+    return fee - (fee * discountPercent ~/ 100);
+  }
+}
+
+class Fine {
+  final int amount;
+
+  const Fine(this.amount);
+
+  Fine operator +(Fine other) => Fine(amount + other.amount);
+
+  bool operator >(Fine other) => amount > other.amount;
+
+  @override
+  bool operator ==(Object other) => other is Fine && other.amount == amount;
+
+  @override
+  int get hashCode => amount.hashCode;
+
+  @override
+  String toString() => 'Fine($amount)';
+}
+
 void main() {
   print('Seed: $seed (t=$t, u=$u)');
   step1();
@@ -244,37 +278,20 @@ void step5() {
   // superclass. Only Book and Dvd need renewal behavior.
 }
 
-class Shelf<T extends LibraryItem> {
-  final List<T> items = [];
-
-  void add(T item) {
-    if (items.length < shelfSize) {
-      items.add(item);
-    }
-  }
-
-  int get count => items.length;
-
-  T? findByTitle(String title) {
-    for (final item in items) {
-      if (item.title == title) {
-        return item;
-      }
-    }
-    return null;
-  }
-}
-
 void step6() {
-  final Shelf<LibraryItem> shelf = Shelf<LibraryItem>();
-  shelf.add(mainBook());
-  shelf.add(mainMagazine());
-  shelf.add(mainDvd());
-  print('Step 6: shelf count = ${shelf.count}');
-  final found = shelf.findByTitle(mainBook().title);
-  print('Step 6: found book? ${found != null}');
-  final missing = shelf.findByTitle('Unknown Title');
-  print('Step 6: missing item? ${missing == null}');
+  final MemberType type = MemberType.values[seed % 3];
+  final int bookFee = mainBook().lateFee(daysLate);
+
+  print(
+    'Step 6: member type = ${type.name} (index ${type.index})',
+  );
+  print('Step 6: max loans = ${type.maxLoans}');
+  print(
+    'Step 6: book fee $bookFee -> '
+    '${type.applyDiscount(bookFee)} after discount',
+  );
+
+  // Enum values prevent invalid member-type strings.
 }
 
 void step7() {
