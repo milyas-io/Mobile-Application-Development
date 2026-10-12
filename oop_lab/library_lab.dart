@@ -31,12 +31,34 @@ class LibraryItem {
   final int year;
 
   LibraryItem(this.title, this.year);
+  String describe() => '$title ($year)';
 }
 
 class Book extends LibraryItem {
   final int pages;
 
   Book(super.title, super.year, this.pages);
+  @override
+  String describe() => '${super.describe()}, $pages pages';
+}
+
+class Magazine extends LibraryItem {
+  final int issue;
+
+  Magazine(super.title, super.year, this.issue);
+
+  @override
+  String describe() => '${super.describe()}, issue $issue';
+}
+
+Magazine mainMagazine() {
+  final int index = (u + 1) % 10;
+
+  return Magazine(
+    titles[index],
+    yearOf(index),
+    1 + (t + u) % 12,
+  );
 }
 
 Book mainBook() {
@@ -70,7 +92,12 @@ void step1() {
 }
 
 void step2() {
-  print('--- Step 2 ---');
+  print('Step 2: ${mainBook().describe()}');
+  print('Step 2: ${mainMagazine().describe()}');
+
+  // Without @override, a misspelled method name such as
+  // descibe() would not replace the inherited describe().
+  // With @override, Dart reports the mistake.
 }
 
 void step3() {
