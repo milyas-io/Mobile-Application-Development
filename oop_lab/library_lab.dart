@@ -330,7 +330,25 @@ void step7() {
 }
 
 void step8() {
-  print('--- Step 8 ---');
+  final Fine bookFine = Fine(mainBook().lateFee(daysLate));
+  final Fine magazineFine = Fine(mainMagazine().lateFee(daysLate));
+
+  final Fine totalFine = bookFine + magazineFine;
+
+  print('Step 8: $bookFine + $magazineFine = $totalFine');
+  print('Step 8: first bigger? ${bookFine > magazineFine}');
+  print(
+    'Step 8: equal copies? '
+    '${bookFine == Fine(bookFine.amount)}',
+  );
+
+  final Set<Fine> fines = {
+    bookFine,
+    Fine(bookFine.amount),
+    magazineFine,
+  };
+
+  print('Step 8: set size = ${fines.length}');
 }
 
 void step9() {
