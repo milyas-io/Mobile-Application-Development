@@ -1,9 +1,5 @@
-// library_lab.dart - Campus Library System
-// Name: ____________________   Roll no: ____________
-
 const String rollNo = '04072313012';
 
-// ===== Seeded settings (generated from YOUR roll number). Do not edit. =====
 final int seed = int.parse(rollNo.substring(rollNo.length - 2));
 final int t = seed ~/ 10;
 final int u = seed % 10;
@@ -29,7 +25,6 @@ final int feeCap = 150 + 10 * t;
 final int renewLimit = 1 + t % 3;
 final int renewAttempts = 2 + u;
 final int shelfSize = 3 + u % 4;
-// ===========================================================================
 
 void main() {
   print('Seed: $seed (t=$t, u=$u)');
