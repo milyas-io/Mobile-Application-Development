@@ -69,6 +69,11 @@ class HomePage extends StatelessWidget {
     Text('Max: $maxCount', key: const Key('info-max')),
   ],
 ),
+const SizedBox(height: 12),
+GoalBanner(
+  count: startCount,
+  max: maxCount,
+),
     ],
   ),
 ),
@@ -129,6 +134,27 @@ class _BuggyCounterState extends State<BuggyCounter> {
           child: Text('+$bugStep'),
         ),
       ],
+    );
+  }
+}
+
+class GoalBanner extends StatelessWidget {
+  const GoalBanner({
+    super.key,
+    required this.count,
+    required this.max,
+  });
+
+  final int count;
+  final int max;
+
+  @override
+  Widget build(BuildContext context) {
+    final percent = count * 100 ~/ max;
+
+    return Text(
+      'Progress: $count of $max ($percent%)',
+      key: const Key('progress'),
     );
   }
 }
