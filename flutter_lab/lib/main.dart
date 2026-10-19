@@ -233,11 +233,12 @@ class Countdown extends StatefulWidget {
 class _CountdownState extends State<Countdown> {
   late int _left;
   late Timer _timer;
+  int _builds = 0;
 
-  @override
-  void initState() {
-    super.initState();
-    _left = startSeconds;
+void initState() {
+  super.initState();
+  lifecycleLog.add('initState');
+  _left = startSeconds;
 
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() => _left--);
@@ -245,17 +246,25 @@ class _CountdownState extends State<Countdown> {
     });
   }
 
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }
+void dispose() {
+  _timer.cancel();
+  lifecycleLog.add('dispose');
+  super.dispose();
+}
 
   @override
-  Widget build(BuildContext context) {
-    return Text(
-      _left > 0 ? 'Time left: $_left s' : 'Time is up!',
-      key: const Key('time-left'),
-    );
-  }
+Widget build(BuildContext context) {
+  _builds++;
+
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        _left > 0 ? 'Time left: $_left s' : 'Time is up!',
+        key: const Key('time-left'),
+      ),
+      Text('Builds: $_builds', key: const Key('builds')),
+    ],
+  );
+}
 }
