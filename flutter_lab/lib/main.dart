@@ -50,7 +50,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Study Tracker: $course')),
-      body: const Center(child: Text('Hello')),
+      body: const Center(child: BuggyCounter()),
     );
   }
 }
