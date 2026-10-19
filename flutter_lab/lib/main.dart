@@ -50,7 +50,28 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Study Tracker: $course')),
-      body: const Center(child: BuggyCounter()),
+    body: SingleChildScrollView(
+  padding: const EdgeInsets.all(16),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      StudentCard(
+        name: studentName,
+        roll: rollNo,
+        course: course,
+      ),
+      const SizedBox(height: 12),
+      Row(
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  children: [
+    Text('Start: $startCount', key: const Key('info-start')),
+    Text('Step: $stepSize', key: const Key('info-step')),
+    Text('Max: $maxCount', key: const Key('info-max')),
+  ],
+),
+    ],
+  ),
+),
     );
   }
 }
@@ -60,7 +81,35 @@ class BuggyCounter extends StatefulWidget {
   @override
   State<BuggyCounter> createState() => _BuggyCounterState();
 }
+class StudentCard extends StatelessWidget {
+  const StudentCard({
+    super.key,
+    required this.name,
+    required this.roll,
+    required this.course,
+  });
 
+  final String name;
+  final String roll;
+  final String course;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Name: $name', key: const Key('student-name')),
+            Text('Roll no: $roll', key: const Key('student-roll')),
+            Text('Course: $course', key: const Key('student-course')),
+          ],
+        ),
+      ),
+    );
+  }
+}
 class _BuggyCounterState extends State<BuggyCounter> {
   int _clicks = 0;
   @override
