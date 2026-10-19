@@ -36,16 +36,24 @@ class LabApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Setup OK: seed $seed (t=$t, u=$u)'),
-        ),
-      ),
+    return const MaterialApp(
+      title: 'Study Tracker',
+      home: HomePage(),
     );
   }
 }
 
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Study Tracker: $course')),
+      body: const Center(child: Text('Hello')),
+    );
+  }
+}
 class BuggyCounter extends StatefulWidget {
   const BuggyCounter({super.key});
 
