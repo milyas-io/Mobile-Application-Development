@@ -1,5 +1,5 @@
-
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 const String studentName = 'Muhammad Ilyas';
@@ -29,7 +29,8 @@ final int startSeconds = 5 + (t + u) % 6;
 final int bugStep = 1 + u % 4;
 
 final List<String> lifecycleLog = <String>[];
-
+// runApp starts the app using LabApp as the root widget.
+// MaterialApp uses HomePage as the first screen of the app.
 void main() => runApp(const LabApp());
 
 // Stateless: This is the main app widget and it does not need its own state.
@@ -38,14 +39,14 @@ class LabApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Study Tracker',
-      home: HomePage(),
-    );
+    return const MaterialApp(title: 'Study Tracker', home: HomePage());
   }
 }
 
 // Stateless: This page displays the other widgets without storing changing values.
+// The widget tree goes from LabApp to MaterialApp, HomePage,
+// Scaffold, SingleChildScrollView, Column, Row and Text.
+// The Max text is 8 levels deep when counting LabApp as level 1.
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -58,11 +59,7 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            StudentCard(
-              name: studentName,
-              roll: rollNo,
-              course: course,
-            ),
+            StudentCard(name: studentName, roll: rollNo, course: course),
             const SizedBox(height: 12),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -94,6 +91,9 @@ class BuggyCounter extends StatefulWidget {
 }
 
 // Stateless: Student details are passed in and stay the same.
+// The fields are final because the student details should not change
+// inside this StatelessWidget.
+// Without final, Dart gives an error because StatelessWidget is immutable.
 class StudentCard extends StatelessWidget {
   const StudentCard({
     super.key,
@@ -124,6 +124,9 @@ class StudentCard extends StatelessWidget {
   }
 }
 
+// Before fixing the bug, I pressed the button three times.
+// The value of _clicks became 9, but the screen still showed 0.
+// This happened because setState was missing, so Flutter did not rebuild the widget.
 class _BuggyCounterState extends State<BuggyCounter> {
   int _clicks = 0;
 
@@ -131,10 +134,7 @@ class _BuggyCounterState extends State<BuggyCounter> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text(
-          'Bug clicks: $_clicks',
-          key: const Key('bug-text'),
-        ),
+        Text('Bug clicks: $_clicks', key: const Key('bug-text')),
         const SizedBox(width: 12),
         ElevatedButton(
           key: const Key('bug-button'),
@@ -151,12 +151,10 @@ class _BuggyCounterState extends State<BuggyCounter> {
 }
 
 // Stateless: Progress is calculated from the count and maximum value.
+// GoalBanner does not need setState because it only displays the values it receives.
+// To show a new count, its parent must rebuild it with an updated count.
 class GoalBanner extends StatelessWidget {
-  const GoalBanner({
-    super.key,
-    required this.count,
-    required this.max,
-  });
+  const GoalBanner({super.key, required this.count, required this.max});
 
   final int count;
   final int max;
@@ -173,6 +171,8 @@ class GoalBanner extends StatelessWidget {
 }
 
 // Stateful: The count changes when plus, minus or reset is pressed.
+// Tally defines the widget, while _TallyState stores the changing count.
+// Keeping them separate lets Flutter update the count without creating a new State object.
 class Tally extends StatefulWidget {
   const Tally({super.key});
 
@@ -180,6 +180,9 @@ class Tally extends StatefulWidget {
   State<Tally> createState() => _TallyState();
 }
 
+// Hot reload keeps the current count because the State object stays alive.
+// Hot restart creates a new State object, so the count goes back to 5.
+// The Tally widget defines the UI, while _TallyState holds the changing value.
 class _TallyState extends State<Tally> {
   int _count = startCount;
 
@@ -244,9 +247,15 @@ class Countdown extends StatefulWidget {
   State<Countdown> createState() => _CountdownState();
 }
 
+// If the timer is not cancelled in dispose, it can keep running
+// even after the Countdown widget is removed.
+// This can cause the error: setState() called after dispose().
 class _CountdownState extends State<Countdown> {
   late int _left;
   late Timer _timer;
+  // Builds increases once every second because the timer calls setState once.
+  // Each setState makes Flutter rebuild the Countdown widget.
+  // I can print lifecycleLog in dispose or use debugPrint to check when dispose runs.
   int _builds = 0;
 
   @override
