@@ -147,6 +147,9 @@ const InfoPanel(),
 const SizedBox(height: 12),
 
 const SummaryRow(),
+const SizedBox(height: 12),
+
+const ShareRow(),
           ],
         ),
       ),
@@ -448,6 +451,44 @@ class InfoPanel extends StatelessWidget {
         Text(
           'Column item B',
           key: const Key('col-b'),
+        ),
+      ],
+    );
+  }
+}
+
+// Think Step 8:
+// SizedBox keeps a fixed width.
+// Expanded must use the remaining space according to its flex value.
+// Flexible can use space according to flex but does not have to fill all of it.
+
+class ShareRow extends StatelessWidget {
+  const ShareRow({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        SizedBox(
+          width: fixedW,
+          child: const Text(
+            'Fixed',
+            key: Key('share-fixed'),
+          ),
+        ),
+        Expanded(
+          flex: flexA,
+          child: const Text(
+            'Expanded',
+            key: Key('share-expanded'),
+          ),
+        ),
+        Flexible(
+          flex: flexB,
+          child: const Text(
+            'Flexible',
+            key: Key('share-flexible'),
+          ),
         ),
       ],
     );
