@@ -138,9 +138,12 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: 12),
 
             const Clock(),
-            const SizedBox(height: 12),
+const SizedBox(height: 12),
 
-            const SwapBoard(),
+const SwapBoard(),
+const SizedBox(height: 12),
+
+const InfoPanel(),
           ],
         ),
       ),
@@ -199,9 +202,6 @@ class SummaryRow extends StatelessWidget {
   }
 }
 
-// ======================================================
-// STEP 1 + STEP 2 + STEP 3
-// ======================================================
 
 class Clock extends StatefulWidget {
   const Clock({super.key});
@@ -396,6 +396,46 @@ class _SwapBoardState extends State<SwapBoard> {
           key: const Key('swap'),
           onPressed: swap,
           child: const Text('Swap'),
+        ),
+      ],
+    );
+  }
+}
+
+// Think Step 6:
+// Row mainAxisAlignment controls horizontal placement because Row's main axis
+// is horizontal.
+// Column crossAxisAlignment controls horizontal placement because Column's
+// cross axis is horizontal.
+
+class InfoPanel extends StatelessWidget {
+  const InfoPanel({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: const [
+            Text(
+              'Row item A',
+              key: Key('row-a'),
+            ),
+            Text(
+              'Row item B',
+              key: Key('row-b'),
+            ),
+          ],
+        ),
+        Text(
+          'Column item A',
+          key: const Key('col-a'),
+        ),
+        Text(
+          'Column item B',
+          key: const Key('col-b'),
         ),
       ],
     );
