@@ -159,14 +159,25 @@ class Clock extends StatefulWidget {
 class _ClockState extends State<Clock> {
   late Timer _timer;
   int _seconds = startSec;
-// Think Step 1:
-// The Timer is started in initState because initState runs only once
-// when the State is created.
-// If the Timer were started inside build, every rebuild would create
-// another Timer and the clock would keep getting faster.
+  int _builds = 0;
+
+  // Think Step 1:
+  // The Timer is started in initState because initState runs only once
+  // when the State is created.
+  // If the Timer were started inside build, every rebuild would create
+  // another Timer and the clock would keep getting faster.
+
+  // Think Step 2:
+  // Builds goes up once per second because each timer tick calls setState once,
+  // which causes one rebuild.
+  // If _timer.cancel() were missing from dispose, the Timer could try to call
+  // setState after the widget had been removed from the tree.
+
   @override
   void initState() {
     super.initState();
+
+    lifecycleLog.add('initState');
 
     _timer = Timer.periodic(
       const Duration(seconds: 1),
@@ -181,10 +192,28 @@ class _ClockState extends State<Clock> {
   }
 
   @override
+  void dispose() {
+    _timer.cancel();
+    lifecycleLog.add('dispose');
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Text(
-      'Session: $_seconds s',
-      key: const Key('clock'),
+    _builds++;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Session: $_seconds s',
+          key: const Key('clock'),
+        ),
+        Text(
+          'Builds: $_builds',
+          key: const Key('builds'),
+        ),
+      ],
     );
   }
 }
