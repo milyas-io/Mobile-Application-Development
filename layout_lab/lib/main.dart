@@ -153,6 +153,9 @@ const ShareRow(),
 const SizedBox(height: 12),
 
 const InfoBox(),
+const SizedBox(height: 12),
+
+const StampStack(),
           ],
         ),
       ),
@@ -523,6 +526,50 @@ class InfoBox extends StatelessWidget {
       child: const Text(
         'Container demo',
         key: Key('info-box-text'),
+      ),
+    );
+  }
+}
+
+// Think Step 10:
+// Stack places widgets on top of each other.
+// The first child is painted at the bottom.
+// Positioned lets a child be placed using top, right, bottom, or left offsets.
+
+class StampStack extends StatelessWidget {
+  const StampStack({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 120,
+      child: Stack(
+        children: [
+          Container(
+            key: const Key('stack-base'),
+            width: double.infinity,
+            height: 120,
+            color: Colors.grey.shade200,
+          ),
+          Positioned(
+            top: dotTop,
+            right: dotRight,
+            child: const Icon(
+              Icons.circle,
+              key: Key('dot-top-right'),
+              size: 18,
+            ),
+          ),
+          Positioned(
+            bottom: dotBottom,
+            left: dotLeft,
+            child: const Icon(
+              Icons.star,
+              key: Key('dot-bottom-left'),
+              size: 24,
+            ),
+          ),
+        ],
       ),
     );
   }
