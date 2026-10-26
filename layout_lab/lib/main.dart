@@ -132,11 +132,23 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SettingsCard(),
-            const SizedBox(height: 12),
+  const SettingsCard(),
+  const SizedBox(height: 12),
 
-            const Clock(),
-          ],
+  const Welcome(),
+  const SizedBox(height: 12),
+
+  const Clock(),
+  const SizedBox(height: 12),
+
+  Row(
+    children: [
+      Tile(tileA),
+      Tile(tileB),
+      Tile(tileC),
+    ],
+  ),
+],
         ),
       ),
     );
@@ -313,6 +325,45 @@ class Probe extends StatelessWidget {
           key: const Key('probe-above'),
         ),
       ],
+    );
+  }
+}
+
+class Welcome extends StatelessWidget {
+  const Welcome({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        'Welcome, $studentName',
+        key: const Key('welcome'),
+      ),
+    );
+  }
+}
+// Think Step 4:
+// Tile is built using composition because it contains an ElevatedButton
+// instead of extending ElevatedButton.
+// Flutter prefers composition because small widgets can be combined and
+// reused flexibly while keeping responsibilities separate.
+class Tile extends StatefulWidget {
+  const Tile(this.label, {super.key});
+
+  final String label;
+
+  @override
+  State<Tile> createState() => _TileState();
+}
+
+class _TileState extends State<Tile> {
+  int taps = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () => setState(() => taps++),
+      child: Text('${widget.label}: $taps'),
     );
   }
 }
