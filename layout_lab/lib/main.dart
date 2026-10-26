@@ -150,6 +150,9 @@ const SummaryRow(),
 const SizedBox(height: 12),
 
 const ShareRow(),
+const SizedBox(height: 12),
+
+const InfoBox(),
           ],
         ),
       ),
@@ -491,6 +494,36 @@ class ShareRow extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+// Think Step 9:
+// Margin adds space outside the Container.
+// Padding adds space inside the Container around its child.
+// BoxDecoration is used for the background colour, border, and rounded corners.
+
+class InfoBox extends StatelessWidget {
+  const InfoBox({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      key: const Key('info-box'),
+      margin: EdgeInsets.all(boxMargin),
+      padding: EdgeInsets.all(boxPad),
+      decoration: BoxDecoration(
+        color: swatches[hue]!.shade100,
+        borderRadius: BorderRadius.circular(boxRadius),
+        border: Border.all(
+          width: boxBorder,
+          color: swatches[hue]!,
+        ),
+      ),
+      child: const Text(
+        'Container demo',
+        key: Key('info-box-text'),
+      ),
     );
   }
 }
