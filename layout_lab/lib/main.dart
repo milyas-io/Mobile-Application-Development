@@ -105,7 +105,6 @@ final List<String> lifecycleLog = <String>[];
 
 void main() => runApp(const LabApp());
 
-// Keep the name LabApp and its const constructor.
 class LabApp extends StatelessWidget {
   const LabApp({super.key});
 
@@ -132,23 +131,17 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-  const SettingsCard(),
-  const SizedBox(height: 12),
+            const SettingsCard(),
+            const SizedBox(height: 12),
 
-  const Welcome(),
-  const SizedBox(height: 12),
+            const Welcome(),
+            const SizedBox(height: 12),
 
-  const Clock(),
-  const SizedBox(height: 12),
+            const Clock(),
+            const SizedBox(height: 12),
 
-  Row(
-    children: [
-      Tile(tileA),
-      Tile(tileB),
-      Tile(tileC),
-    ],
-  ),
-],
+            const SwapBoard(),
+          ],
         ),
       ),
     );
@@ -280,8 +273,6 @@ class _ClockState extends State<Clock> {
           'Builds: $_builds',
           key: const Key('builds'),
         ),
-
-        // Step 3
         Probe(seconds: _seconds),
       ],
     );
@@ -329,6 +320,7 @@ class Probe extends StatelessWidget {
   }
 }
 
+
 class Welcome extends StatelessWidget {
   const Welcome({super.key});
 
@@ -347,6 +339,7 @@ class Welcome extends StatelessWidget {
 // instead of extending ElevatedButton.
 // Flutter prefers composition because small widgets can be combined and
 // reused flexibly while keeping responsibilities separate.
+
 class Tile extends StatefulWidget {
   const Tile(this.label, {super.key});
 
@@ -364,6 +357,47 @@ class _TileState extends State<Tile> {
     return ElevatedButton(
       onPressed: () => setState(() => taps++),
       child: Text('${widget.label}: $taps'),
+    );
+  }
+}
+
+
+// Think Step 5:
+// Without keys, Flutter matches widgets mainly by type and position.
+// The Element and its State stay at the old position while a new widget
+// label is placed there.
+// With ValueKey, Flutter can identify each Tile,
+// so its State moves with the correct widget.
+
+class SwapBoard extends StatefulWidget {
+  const SwapBoard({super.key});
+
+  @override
+  State<SwapBoard> createState() => _SwapBoardState();
+}
+
+class _SwapBoardState extends State<SwapBoard> {
+  var tiles = [
+    Tile(tileA, key: ValueKey(tileA)),
+    Tile(tileB, key: ValueKey(tileB)),
+    Tile(tileC, key: ValueKey(tileC)),
+  ];
+
+  void swap() => setState(() => tiles = tiles.reversed.toList());
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: tiles,
+        ),
+        ElevatedButton(
+          key: const Key('swap'),
+          onPressed: swap,
+          child: const Text('Swap'),
+        ),
+      ],
     );
   }
 }
